@@ -1,7 +1,7 @@
 import pygame
-from gestor_recursos import GestorRecursos
+from gestor_recursos import gestor_recursos
 
-class MenuPrincipal(GestorRecursos): 
+class MenuPrincipal(gestor_recursos): 
  def __init__(self, pantalla):
         super().__init__()
         self.pantalla = pantalla

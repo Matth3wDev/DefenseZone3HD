@@ -7,7 +7,7 @@ from enemigos import enemigos
 from jugador import jugador  
 from nivel import nivel 
 from torre import torre 
-from menu_principal import menu_principal 
+from menu_principal import MenuPrincipal 
 
 
 class MenuPrincipal:
