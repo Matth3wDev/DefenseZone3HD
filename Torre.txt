@@ -1,0 +1,47 @@
+import pygame
+import math
+
+class torre:
+    #Clase base para todas las torres del juego.
+    def __init__(self, x, y, nombre, costo, rango, cadencia_fuego, daño, imagen_torre):
+        self.x = x
+        self.y = y
+        self.nombre = nombre
+        self.costo = costo
+        self.rango = rango
+        self.cadencia_fuego = cadencia_fuego
+        self.daño = daño
+        self.imagen = pygame.image.load(imagen_torre).convert_alpha()
+        self.rect = self.imagen.get_rect(center=(x, y))
+        self.ultimo_disparo = pygame.time.get_ticks()
+        self.enemigo_actual = None
+    
+    def dibujar(self, pantalla):
+        #Dibuja la torre en la pantalla.
+        pantalla.blit(self.imagen, self.rect)
+        # Opcional: Dibujar el rango para depuración
+        pygame.draw.circle(pantalla, (255, 255, 255, 50), self.rect.center, self.rango, 1)
+
+    def buscar_objetivo(self, enemigos):
+        #Busca y selecciona un enemigo dentro del rango
+        enemigo_mas_cercano = None
+        distancia_minima = float('inf')
+
+        for enemigo in enemigos:
+            # Calcular la distancia entre la torre y el enemigo
+            distancia = math.hypot(self.x - enemigo.x, self.y - enemigo.y)
+            
+            if distancia <= self.rango:
+                if distancia < distancia_minima:
+                    distancia_minima = distancia
+                    enemigo_mas_cercano = enemigo
+        self.enemigo_actual = enemigo_mas_cercano
+
+    def disparar(self):
+        #Maneja la lógica de disparo de la torre.
+        tiempo_actual = pygame.time.get_ticks()
+        if self.enemigo_actual and tiempo_actual - self.ultimo_disparo >= self.cadencia_fuego:
+            self.ultimo_disparo = tiempo_actual
+            return True # Retorna True si se realizó un disparo
+        return False
+    
