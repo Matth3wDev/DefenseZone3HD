@@ -64,8 +64,8 @@ class SoldadoRazo(enemigos):
         super().__init__("Soldado Razo", 50, 4.5, 4.5, sprite_path, x, y)
 
 
-enemigos = [
-    Soldado("", 1024, 550),
-    Tanque("recursos/img/Tanque.png", 1224, 550), 
-    EnemigoRapido("", 1424, 550)
-]
+# enemigos = [
+#     Soldado("", 1024, 550),
+#     Tanque("recursos/img/Tanque.png", 1224, 550), 
+#     EnemigoRapido("", 1424, 550)
+# ]
