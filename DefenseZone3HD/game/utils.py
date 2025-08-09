@@ -1,13 +1,5 @@
 import pygame
 
-def cargar_imagen(ruta_archivo):
-    # Función para cargar una imagen desde la ruta especificada
-    pass
-
-def cargar_sonido(ruta_archivo):
-    # Función para cargar un sonido desde la ruta especificada
-    pass
-
 def limitar(valor, valor_minimo, valor_maximo):
     # Función para limitar un valor entre un mínimo y un máximo
     return max(min(valor, valor_maximo), valor_minimo)

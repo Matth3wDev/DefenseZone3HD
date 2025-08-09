@@ -19,7 +19,7 @@ class MenuPrincipal:
         self.crear_botones()
 
     def crear_botones(self):
-        nombres = ["Jugar", "Opciones", "Salir"]
+        nombres = ["Jugar", "Salir"]
         ancho = 300
         alto = 60
         x = (self.pantalla.get_width() - ancho) // 2

@@ -10,7 +10,7 @@ class interfaz:
         self.crear_botones()
 
     def crear_botones(self):
-        nombres = ["Torre Básica", "Torre Fuego", "Pausar"]
+        nombres = ["Nivel 1", "Nivel 2", "Nivel 3", "Salir"]
         for i, nombre in enumerate(nombres):
             x = self.pantalla.get_width() - self.ancho_panel + 20
             y = 150 + i * 70
