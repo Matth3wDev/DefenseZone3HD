@@ -1,38 +1,65 @@
 import pygame
+import torre  
+
+pygame.init()
+
+
+ANCHO_VENTANA = 800
+ALTO_VENTANA = 600
+
+ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+clock = pygame.time.Clock()
+
 
 class torre:
-    def __init__(self, nombre, daño, alcance, velocidad_disparo):
-        self.nombre = nombre
-        self.daño = daño
-        self.alcance = alcance
-        self.velocidad_disparo = velocidad_disparo
-
-    def atacar(self, enemigo):
-        if self.esta_en_alcance(enemigo):
-            enemigo.recibir_daño(self.daño)
-
-    def esta_en_alcance(self, enemigo):
-        # Lógica de cálculo de alcance (placeholder)
-        return True
-
-class TorreFrancotirador(torre):
     def __init__(self):
-        super().__init__(nombre="Torre Francotirador", daño=50, alcance=300, velocidad_disparo=1.5)
+        self.vidas = 3
+        self.puntos = 0
+        self.nivel = 3
+        self.derrota = False
 
-class TorreAmetralladora(torre):
-    def __init__(self):
-        super().__init__(nombre="Torre Ametralladora", daño=10, alcance=150, velocidad_disparo=0.5)
+estado = torre()
 
-class TorreLlamas(torre):
-    def __init__(self):
-        super().__init__(nombre="Torre de Llamas", daño=20, alcance=100, velocidad_disparo=0.8)
 
-def crear_torre(tipo_torre):
-    if tipo_torre == "francotirador":
-        return TorreFrancotirador()
-    elif tipo_torre == "ametralladora":
-        return TorreAmetralladora()
-    elif tipo_torre == "llamas":
-        return TorreLlamas()
-    else:
-        raise ValueError("Tipo de torre desconocido")
+lista_torres = []
+lista_enemigos = []  
+colocando_tanque = False
+
+
+boton_ametralladora = pygame.Rect(10, 10, 100, 50)
+
+def verificar_derrota():
+    for enemigo in lista_enemigos:
+        for torre_obj in lista_torres:
+            distancia = ((enemigo.x - torre_obj.x)**2 + (enemigo.y - torre_obj.y)**2)**0.5
+            if distancia < 50:  
+                estado.derrota = True
+                print("¡Derrota! Un enemigo alcanzó la torre.")
+                return
+
+run = True
+while run:
+    ventana.fill((0, 0, 0))  
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if boton_ametralladora.collidepoint(event.pos):
+                colocando_tanque = True
+            elif colocando_tanque:
+                nuevo_tanque = torre(event.pos[0], event.pos[1])
+                lista_torres.append(nuevo_tanque)
+                colocando_tanque = False
+
+    if colocando_tanque:
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        
+
+    verificar_derrota()
+    if estado.derrota:
+        run = False  
+
+    pygame.display.update()
+    clock.tick(60)
