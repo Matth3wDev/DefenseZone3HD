@@ -1,0 +1,6 @@
+- No tiene una demo o tour guiado al iniciar el juego (Requisito 4)
+- No tiene uso de conjuntos (Requisito 6)
+- No tiene uso de funciones lambda o delegados (Requisito 7)
+- No tiene una programación asíncrona (Requisito 9)
+
+(Esto es lo que nos falta de los requisitos del proyecto)

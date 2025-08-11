@@ -3,7 +3,7 @@ import pygame
 
 class gestor_recursos:
     def __init__(self):
-        self.carpeta_base = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets/imagen')
+        self.carpeta_base = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets/Mapa')
         print(f"[GestorRecursos] Carpeta base: {self.carpeta_base}")
 
     def cargar_imagen(self, nombre_archivo):

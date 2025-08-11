@@ -7,53 +7,14 @@ from enemigos import enemigos
 from jugador import jugador  
 from nivel import nivel 
 from torre import torre 
-from menu_principal import MenuPrincipal 
-
-
-class MenuPrincipal:
-    def __init__(self, pantalla):
-        self.pantalla = pantalla
-        self.font = pygame.font.SysFont("consolas", 36)
-        self.botones = {}
-        self.seleccion = None
-        self.crear_botones()
-
-    def crear_botones(self):
-        nombres = ["Jugar", "Salir"]
-        ancho = 300
-        alto = 60
-        x = (self.pantalla.get_width() - ancho) // 2
-        for i, nombre in enumerate(nombres):
-            y = 250 + i * 100
-            rect = pygame.Rect(x, y, ancho, alto)
-            self.botones[nombre] = rect
-
-    def dibujar(self):
-        self.pantalla.fill((20, 20, 40))
-        titulo = self.font.render("Menú Principal", True, (255, 255, 255))
-        self.pantalla.blit(titulo, ((self.pantalla.get_width() - titulo.get_width()) // 2, 100))
-
-        for nombre, rect in self.botones.items():
-            pygame.draw.rect(self.pantalla, (70, 100, 160), rect)
-            pygame.draw.rect(self.pantalla, (255, 255, 255), rect, 2)
-            texto = self.font.render(nombre, True, (255, 255, 255))
-            self.pantalla.blit(texto, (rect.x + 20, rect.y + 10))
-
-    def manejar_evento(self, evento):
-        if evento.type == pygame.MOUSEBUTTONDOWN:
-            pos = evento.pos
-            for nombre, rect in self.botones.items():
-                if rect.collidepoint(pos):
-                    self.seleccion = nombre
-                    print(f"[MenuPrincipal] Selección: {nombre}")
-                    return nombre
-        return None
+from menu_principal import menu_principal 
+from ControladorMovimiento import ControladorMovimiento
 
 
 def verificar_recursos():
     base = os.path.join(os.path.dirname(__file__), 'assets')
     rutas = {
-        "fondo.jpg": os.path.join(base, 'imagen', 'fondo.jpg'),
+        "Mapa.png": os.path.join(base, 'Mapa', 'Mapa.png'),
         "disparo.wav": os.path.join(base, 'sonidos', 'disparo.wav')
     }
     for nombre, ruta in rutas.items():
@@ -71,26 +32,25 @@ pygame.display.set_caption("Defense Zone 3HD")
 verificar_recursos()
 
 reloj = pygame.time.Clock()
-menu = MenuPrincipal(pantalla)
+menu = menu_principal(pantalla)
 interfaz = interfaz(pantalla)
 recursos = gestor_recursos()
 jugador = jugador(100, 100, interfaz.ancho_panel, ANCHO, ALTO)
 
 # Fondo
 try:
-    fondo = recursos.cargar_imagen("fondo.jpg")
+    fondo = recursos.cargar_imagen("Mapa.png")
 except pygame.error:
-    print("[Main] Cargando fondo.jpg desde gestor de recursos...")
+    print("[Main] Cargando Mapa.png desde gestor de recursos...")
     fondo = pygame.Surface((ANCHO, ALTO))
-    fondo.fill((30, 30, 30))
+    fondo.fill((30,30,30))
     fuente = pygame.font.SysFont("arial", 24)
     texto = fuente.render("Fondo no encontrado", True, (255, 255, 255))
     fondo.blit(texto, (ANCHO // 2 - texto.get_width() // 2, ALTO // 2 - texto.get_height() // 2))
 
-vidas = 5
+vidas = 3
 puntos = 0
-nivel = 1
-
+nivel = 3
 
 en_menu = True
 corriendo = True
@@ -101,20 +61,50 @@ while corriendo:
 
         if en_menu:
             seleccion = menu.manejar_evento(evento)
-            if seleccion == "Jugar":
+            
+            # Manejar selección de niveles
+            if seleccion == "selector_niveles":
+                # Se abrió el selector de niveles, no hacer nada
+                pass
+            elif seleccion == "iniciar_nivel_1":
+                # Iniciar juego con nivel 1
+                nivel = 1
+                vidas = 3  # Reiniciar vidas
+                puntos = 0  # Reiniciar puntos
                 en_menu = False
+                print("[Main] Iniciando juego - Nivel 1")
+            elif seleccion == "iniciar_nivel_2":
+                # Iniciar juego con nivel 2
+                nivel = 2
+                vidas = 3
+                puntos = 0
+                en_menu = False
+                print("[Main] Iniciando juego - Nivel 2")
+            elif seleccion == "iniciar_nivel_3":
+                # Iniciar juego con nivel 3
+                nivel = 3
+                vidas = 3
+                puntos = 0
+                en_menu = False
+                print("[Main] Iniciando juego - Nivel 3")
+            elif seleccion == "volver":
+                # Volver al menú principal desde selector
+                print("[Main] Regresando al menú principal")
             elif seleccion == "Salir":
                 corriendo = False
         else:
             seleccion = interfaz.manejar_evento(evento)
             if seleccion:
                 print(f"[Main] Acción seleccionada: {seleccion}")
+                if seleccion == "Salir":
+                    en_menu = True
 
     if en_menu:
         menu.dibujar()
     else:
-        teclas = pygame.key.get_pressed()
-        jugador.mover(teclas)
+        if not interfaz.esta_pausado():
+            teclas = pygame.key.get_pressed()
+            jugador.mover(teclas)
 
         pantalla.blit(fondo, (0, 0))
         jugador.dibujar(pantalla)
