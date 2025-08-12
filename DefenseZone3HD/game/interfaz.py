@@ -20,13 +20,13 @@ class interfaz:
     def crear_interfaz_modal(self):
         
         ancho_modal = 300
-        alto_modal = 250  # Reducido porque hay menos botones
+        alto_modal = 250  
         x = (self.pantalla.get_width() - ancho_modal) // 2
         y = (self.pantalla.get_height() - alto_modal) // 2
         self.modal_rect = pygame.Rect(x, y, ancho_modal, alto_modal)
         
         
-        nombres = ["Pausar", "Salir"]  # Quitamos Nivel 1, Nivel 2, Nivel 3
+        nombres = ["Pausar", "Salir"]  
         self.botones = {}
         
         for i, nombre in enumerate(nombres):
@@ -36,7 +36,7 @@ class interfaz:
             self.botones[nombre] = btn_rect
 
     def dibujar_boton_toggle(self):
-        # Solo dibujar el botón cuando el juego NO está pausado
+        
         if not self.pausado:
             color_toggle = (80, 180, 80)
             
@@ -98,10 +98,10 @@ class interfaz:
         if evento.type == pygame.MOUSEBUTTONDOWN:
             pos = evento.pos
             
-            # Solo permitir clic en el botón toggle cuando NO está pausado
+            
             if self.boton_toggle.collidepoint(pos) and not self.pausado:
                 self.pausado = True
-                self.interfaz_visible = True  # Abrir la interfaz cuando se pausa
+                self.interfaz_visible = True  
                 print(f"[Interfaz] Juego pausado")
                 return "toggle_pausa"
             
@@ -112,13 +112,13 @@ class interfaz:
                         self.seleccion_actual = nombre
                         
                         if nombre == "Pausar":
-                            # Cambio: Al hacer clic en Reanudar, cierra la ventana Y reanuda el juego
-                            if self.pausado:  # Si está pausado, reanudar
+                            
+                            if self.pausado:  
                                 self.pausado = False
-                                self.interfaz_visible = False  # Cerrar ventana
+                                self.interfaz_visible = False 
                                 print(f"[Interfaz] Juego reanudado - Ventana cerrada")
                                 return "toggle_pausa"
-                            else:  # Si no está pausado, pausar
+                            else:  
                                 self.pausado = True
                                 print(f"[Interfaz] Juego pausado")
                                 return "toggle_pausa"
@@ -132,13 +132,13 @@ class interfaz:
                     self.interfaz_visible = False
                     return "cerrar_interfaz"
             else:
-                # Si la interfaz no está visible, hacer clic derecho para abrir menú
-                if evento.button == 3:  # Botón derecho del ratón
+                
+                if evento.button == 3:  
                     self.interfaz_visible = True
                     print(f"[Interfaz] Interfaz abierta con botón derecho")
                     return "toggle_interfaz"
         
-        # Tecla ESC para abrir/cerrar interfaz
+        
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_TAB:
                 self.interfaz_visible = not self.interfaz_visible

@@ -13,7 +13,7 @@ class menu_principal:
         self.selector_nivel_visible = False
         self.nivel_seleccionado = None
         
-        # Cargar fondo si existe
+        
         try:
             self.fondo = self.recursos.cargar_interfaz("Window.png") 
         except:
@@ -33,14 +33,14 @@ class menu_principal:
             self.botones[nombre] = rect
 
     def crear_selector_niveles(self):
-        # Crear ventana modal para selección de niveles
+        
         ancho_modal = 400
         alto_modal = 350
         x = (self.pantalla.get_width() - ancho_modal) // 2
         y = (self.pantalla.get_height() - alto_modal) // 2
         self.modal_rect = pygame.Rect(x, y, ancho_modal, alto_modal)
         
-        # Crear botones de niveles
+        
         niveles = ["Nivel 1", "Nivel 2", "Nivel 3", "Volver"]
         self.botones_niveles = {}
         
@@ -51,18 +51,18 @@ class menu_principal:
             self.botones_niveles[nivel] = btn_rect
 
     def dibujar(self):
-        # Dibujar fondo si está disponible, sino color sólido
+        
         if self.fondo:
             self.pantalla.blit(self.fondo, (0, 0))
         else:
             self.pantalla.fill((20, 20, 40))
         
-        # Título del menú
+        
         titulo = self.font.render("Defense Zone 3HD", True, (255, 255, 255))
         titulo_rect = titulo.get_rect(center=(self.pantalla.get_width() // 2, 150))
         self.pantalla.blit(titulo, titulo_rect)
 
-        # Dibujar botones principales
+        
         for nombre, rect in self.botones.items():
             pygame.draw.rect(self.pantalla, (70, 100, 160), rect)
             pygame.draw.rect(self.pantalla, (255, 255, 255), rect, 2)
@@ -70,29 +70,29 @@ class menu_principal:
             texto_rect = texto.get_rect(center=rect.center)
             self.pantalla.blit(texto, texto_rect)
 
-        # Dibujar selector de niveles si está visible
+        
         if self.selector_nivel_visible:
             self.dibujar_selector_niveles()
 
     def dibujar_selector_niveles(self):
-        # Overlay semitransparente
+        
         overlay = pygame.Surface((self.pantalla.get_width(), self.pantalla.get_height()))
         overlay.set_alpha(180)
         overlay.fill((0, 0, 0))
         self.pantalla.blit(overlay, (0, 0))
         
-        # Ventana modal
+        
         pygame.draw.rect(self.pantalla, (40, 40, 60), self.modal_rect)
         pygame.draw.rect(self.pantalla, (200, 200, 200), self.modal_rect, 3)
         
-        # Título de selección
+        
         titulo = self.font_small.render("SELECCIONAR NIVEL", True, (255, 255, 255))
         titulo_rect = titulo.get_rect(centerx=self.modal_rect.centerx, y=self.modal_rect.y + 30)
         self.pantalla.blit(titulo, titulo_rect)
         
-        # Dibujar botones de niveles
+        
         for nombre, rect in self.botones_niveles.items():
-            # Color diferente para botón volver
+            
             if nombre == "Volver":
                 color = (160, 80, 80)
             else:
@@ -109,7 +109,7 @@ class menu_principal:
         if evento.type == pygame.MOUSEBUTTONDOWN:
             pos = evento.pos
             
-            # Si el selector de niveles está visible
+            
             if self.selector_nivel_visible:
                 # Verificar clics en botones de niveles
                 for nombre, rect in self.botones_niveles.items():
@@ -123,29 +123,29 @@ class menu_principal:
                             self.nivel_seleccionado = nombre
                             self.selector_nivel_visible = False
                             print(f"[MenuPrincipal] Nivel seleccionado: {nombre}")
-                            return f"iniciar_{nombre.lower().replace(' ', '_')}"  # Retorna "iniciar_nivel_1", etc.
+                            return f"iniciar_{nombre.lower().replace(' ', '_')}"  
                 
-                # Clic fuera de la ventana modal para cerrar
+                
                 if not self.modal_rect.collidepoint(pos):
                     self.selector_nivel_visible = False
                     return "volver"
             
             else:
-                # Verificar clics en botones principales
+                
                 for nombre, rect in self.botones.items():
                     if rect.collidepoint(pos):
                         if nombre == "Jugar":
-                            # Mostrar selector de niveles
+                            
                             self.selector_nivel_visible = True
                             print("[MenuPrincipal] Abriendo selector de niveles")
                             return "selector_niveles"
                         else:
-                            # Otros botones (como Salir)
+                            
                             self.seleccion = nombre
                             print(f"[MenuPrincipal] Selección: {nombre}")
                             return nombre
         
-        # Tecla ESC para cerrar selector de niveles
+        
         if evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_ESCAPE and self.selector_nivel_visible:
                 self.selector_nivel_visible = False

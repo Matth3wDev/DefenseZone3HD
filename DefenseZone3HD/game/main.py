@@ -9,7 +9,7 @@ from nivel import nivel
 from torre import torre 
 from menu_principal import menu_principal 
 from ControladorMovimiento import ControladorMovimiento
-
+from ComputadoraIA import ComputadoraIA 
 
 def verificar_recursos():
     base = os.path.join(os.path.dirname(__file__), 'assets')
@@ -62,33 +62,33 @@ while corriendo:
         if en_menu:
             seleccion = menu.manejar_evento(evento)
             
-            # Manejar selección de niveles
+    
             if seleccion == "selector_niveles":
-                # Se abrió el selector de niveles, no hacer nada
+                
                 pass
             elif seleccion == "iniciar_nivel_1":
-                # Iniciar juego con nivel 1
+                
                 nivel = 1
-                vidas = 3  # Reiniciar vidas
-                puntos = 0  # Reiniciar puntos
+                vidas = 3  
+                puntos = 0  
                 en_menu = False
                 print("[Main] Iniciando juego - Nivel 1")
             elif seleccion == "iniciar_nivel_2":
-                # Iniciar juego con nivel 2
+                
                 nivel = 2
                 vidas = 3
                 puntos = 0
                 en_menu = False
                 print("[Main] Iniciando juego - Nivel 2")
             elif seleccion == "iniciar_nivel_3":
-                # Iniciar juego con nivel 3
+                
                 nivel = 3
                 vidas = 3
                 puntos = 0
                 en_menu = False
                 print("[Main] Iniciando juego - Nivel 3")
             elif seleccion == "volver":
-                # Volver al menú principal desde selector
+                
                 print("[Main] Regresando al menú principal")
             elif seleccion == "Salir":
                 corriendo = False
