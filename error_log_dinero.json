@@ -1,0 +1,11 @@
+{
+  "estadisticas": {
+    "cantidad_actual": 1000,
+    "cantidad_inicial": 1000,
+    "total_ganado": 0,
+    "total_gastado": 0,
+    "transacciones_totales": 0,
+    "ganancia_neta": 0
+  },
+  "historial": []
+}

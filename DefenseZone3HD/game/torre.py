@@ -1,65 +1,47 @@
 import pygame
-import torre  
-
-pygame.init()
-
-
-ANCHO_VENTANA = 800
-ALTO_VENTANA = 600
-
-ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-clock = pygame.time.Clock()
-
+import math
 
 class torre:
-    def __init__(self):
-        self.vidas = 3
-        self.puntos = 0
-        self.nivel = 3
-        self.derrota = False
-
-estado = torre()
-
-
-lista_torres = []
-lista_enemigos = []  
-colocando_tanque = False
-
-
-boton_ametralladora = pygame.Rect(10, 10, 100, 50)
-
-def verificar_derrota():
-    for enemigo in lista_enemigos:
-        for torre_obj in lista_torres:
-            distancia = ((enemigo.x - torre_obj.x)**2 + (enemigo.y - torre_obj.y)**2)**0.5
-            if distancia < 50:  
-                estado.derrota = True
-                print("¡Derrota! Un enemigo alcanzó la torre.")
-                return
-
-run = True
-while run:
-    ventana.fill((0, 0, 0))  
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if boton_ametralladora.collidepoint(event.pos):
-                colocando_tanque = True
-            elif colocando_tanque:
-                nuevo_tanque = torre(event.pos[0], event.pos[1])
-                lista_torres.append(nuevo_tanque)
-                colocando_tanque = False
-
-    if colocando_tanque:
-        mouse_x, mouse_y = pygame.mouse.get_pos()
+    
+    def __init__(self, x, y, nombre, costo, rango, cadencia_fuego, daño, imagen_torre):
+        self.x = x
+        self.y = y
+        self.nombre = nombre
+        self.costo = costo
+        self.rango = rango
+        self.cadencia_fuego = cadencia_fuego
+        self.daño = daño
+        self.imagen = pygame.image.load(imagen_torre).convert_alpha()
+        self.rect = self.imagen.get_rect(center=(x, y))
+        self.ultimo_disparo = pygame.time.get_ticks()
+        self.enemigo_actual = None
+    
+    def dibujar(self, pantalla):
         
+        pantalla.blit(self.imagen, self.rect)
+        
+        pygame.draw.circle(pantalla, (255, 255, 255, 50), self.rect.center, self.rango, 1)
 
-    verificar_derrota()
-    if estado.derrota:
-        run = False  
+    def buscar_objetivo(self, enemigos):
+        
+        enemigo_mas_cercano = None
+        distancia_minima = float('inf')
 
-    pygame.display.update()
-    clock.tick(60)
+        for enemigo in enemigos:
+            
+            distancia = math.hypot(self.x - enemigo.x, self.y - enemigo.y)
+            
+            if distancia <= self.rango:
+                if distancia < distancia_minima:
+                    distancia_minima = distancia
+                    enemigo_mas_cercano = enemigo
+        self.enemigo_actual = enemigo_mas_cercano
+
+    def disparar(self):
+        
+        tiempo_actual = pygame.time.get_ticks()
+        if self.enemigo_actual and tiempo_actual - self.ultimo_disparo >= self.cadencia_fuego:
+            self.ultimo_disparo = tiempo_actual
+            return True 
+        return False
+    
